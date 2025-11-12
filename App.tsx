@@ -118,7 +118,7 @@ const App: React.FC = () => {
     });
 
     return (
-        <div className="relative flex flex-col min-h-screen text-slate-900 dark:text-slate-100">
+        <div className="relative flex flex-col min-h-screen bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-500">
              <DotGrid
                 dotSize={2}
                 gap={25}
