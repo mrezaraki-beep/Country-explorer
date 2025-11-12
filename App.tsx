@@ -125,7 +125,7 @@ const App: React.FC = () => {
                 baseColor={isDarkMode ? '#475569' : '#e2e8f0'} // slate-600, slate-200
                 activeColor={isDarkMode ? '#2dd4bf' : '#14b8a6'} // teal-400, teal-500
                 proximity={100}
-                className="absolute inset-0 -z-10"
+                className="absolute inset-0"
             />
             <main className="relative z-10 flex-grow container mx-auto p-4 md:p-6 flex flex-col items-center pt-8 sm:pt-16">
                 {isLoading ? (
