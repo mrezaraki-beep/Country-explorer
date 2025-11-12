@@ -1,4 +1,3 @@
-
 {
   "compilerOptions": {
     "target": "ES2020",
@@ -21,7 +20,12 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["."],
-  "exclude": ["vite.config.ts"],
+  "include": [
+    "App.tsx",
+    "index.tsx",
+    "types.ts",
+    "store/**/*.ts",
+    "components/**/*.tsx"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
