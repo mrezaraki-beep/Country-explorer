@@ -5,7 +5,6 @@ import Shuffle from './components/Shuffle';
 import DotGrid from './components/DotGrid';
 import GlobeIcon from './components/GlobeIcon';
 import StarBorder from './components/StarBorder';
-import { GoogleGenAI } from "@google/genai";
 
 const LoadingSpinner: React.FC = () => (
     <div className="flex items-center justify-center h-full">
@@ -43,83 +42,6 @@ const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({ label,
     </div>
 );
 
-// --- Gemini-Powered Fun Facts Component ---
-const FunFacts: React.FC<{ countryName: string }> = ({ countryName }) => {
-    const [facts, setFacts] = useState<string[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [generationKey, setGenerationKey] = useState(0); // Key to trigger refetch
-
-    const fetchFacts = async () => {
-        setIsLoading(true);
-        setError(null);
-        try {
-            if (!process.env.API_KEY) {
-                // In a real app, you might show a more user-friendly message or disable the feature.
-                // For this environment, we assume the key is present.
-                throw new Error("API key is not configured.");
-            }
-            const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-            const prompt = `Tell me 3 interesting and concise fun facts about ${countryName}. Each fact should be on a new line.`;
-            
-            const response = await ai.models.generateContent({
-                model: 'gemini-2.5-flash',
-                contents: prompt,
-            });
-
-            const text = response.text;
-            // Split by newline and remove any empty strings or list markers like '*' or '-'
-            const parsedFacts = text.split('\n').map(fact => fact.trim().replace(/^[\*\-]\s*/, '')).filter(Boolean);
-            setFacts(parsedFacts);
-
-        } catch (err: any) {
-            setError(err.message || 'Failed to generate fun facts.');
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchFacts();
-    }, [countryName, generationKey]);
-
-    const handleRegenerate = () => {
-        setGenerationKey(prev => prev + 1);
-    };
-
-    return (
-        <div className="pt-4 mt-4">
-            <div className="flex justify-between items-center border-b-2 border-teal-500 pb-2 mb-4">
-                <h3 className="text-xl font-semibold text-slate-800 dark:text-slate-200">Did you know?</h3>
-                <button 
-                    onClick={handleRegenerate} 
-                    disabled={isLoading}
-                    className="p-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    aria-label="Generate new facts"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 text-teal-500 ${isLoading ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h5M20 20v-5h-5M4 4l1.5 1.5A9 9 0 0120.5 15M20 20l-1.5-1.5A9 9 0 003.5 9" />
-                    </svg>
-                </button>
-            </div>
-            {isLoading ? (
-                <div className="space-y-3 animate-pulse">
-                    <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-5/6"></div>
-                    <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-full"></div>
-                    <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-4/6"></div>
-                </div>
-            ) : error ? (
-                <p className="text-red-500 text-sm">{error}</p>
-            ) : (
-                <ul className="list-disc list-inside space-y-2 text-slate-700 dark:text-slate-300">
-                    {facts.map((fact, index) => <li key={index}>{fact}</li>)}
-                </ul>
-            )}
-        </div>
-    );
-};
-
-
 const CountryDetail: React.FC = () => {
     const { selectedCountry } = useCountryStore();
 
@@ -151,8 +73,6 @@ const CountryDetail: React.FC = () => {
                 <DetailRow label="Capital" value={capital || 'N/A'} />
                 <DetailRow label="Region" value={region} />
                 <DetailRow label="Subregion" value={subregion || 'N/A'} />
-
-                <FunFacts countryName={name} />
 
                 <div className="pt-6 text-center">
                     <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" 
