@@ -10,7 +10,8 @@ on:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  contents: read
+  # Required to allow the deploy action to push to the gh-pages branch
+  contents: write
   pages: write
   id-token: write
 
