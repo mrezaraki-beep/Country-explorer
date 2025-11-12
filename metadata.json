@@ -1,0 +1,5 @@
+{
+  "name": "Country Explorer",
+  "description": "An interactive application to browse countries of the world and view their flags, calling codes, and demographic information. Click on a country from the list to see its details.",
+  "requestFramePermissions": []
+}
